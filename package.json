@@ -1,6 +1,6 @@
 {
   "name": "open-question-labeling-studio",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "开放题文本、五模型回复、排序与截图的本地记录库",
   "main": "electron/main.cjs",
   "author": "Open Question Labeling Studio",
@@ -17,7 +17,8 @@
     "dist:installer": "npm run build && electron-builder --win nsis --publish never",
     "release:manifest": "node scripts/create-update-manifest.cjs",
     "repo:prepare": "node scripts/prepare-repository.cjs",
-    "pretest": "node scripts/prepare-test-directories.cjs"
+    "pretest": "node scripts/prepare-test-directories.cjs",
+    "postinstall": "node node_modules/electron/install.js"
   },
   "dependencies": {
     "lucide-react": "^1.55.0",

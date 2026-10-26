@@ -6,7 +6,7 @@ if defined INSTALLED_APP if exist "%INSTALLED_APP%" (
   start "" "%INSTALLED_APP%"
   exit /b 0
 )
-set "APP_EXE=%~dp0release\OpenQuestionStudio-0.3.0.exe"
+set "APP_EXE=%~dp0release\OpenQuestionStudio-0.3.1.exe"
 if exist "%APP_EXE%" (
   start "" "%APP_EXE%"
   exit /b 0
