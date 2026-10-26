@@ -16,7 +16,8 @@
     "preview": "vite preview --host 127.0.0.1",
     "dist:installer": "npm run build && electron-builder --win nsis --publish never",
     "release:manifest": "node scripts/create-update-manifest.cjs",
-    "repo:prepare": "node scripts/prepare-repository.cjs"
+    "repo:prepare": "node scripts/prepare-repository.cjs",
+    "pretest": "node scripts/prepare-test-directories.cjs"
   },
   "dependencies": {
     "lucide-react": "^1.55.0",

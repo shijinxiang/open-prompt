@@ -4,6 +4,7 @@ const fs = require('fs/promises')
 const path = require('path')
 async function main() {
   const root = path.resolve(__dirname, '..'), target = await fs.mkdtemp(path.join(root, '.repository-export-'))
+  await fs.mkdir(path.join(root, 'test-results'), { recursive: true })
   const allowed = ['src', 'electron', 'scripts', 'tests', 'distribution', 'build', 'docs', '.github', '.gitignore', 'package.json', 'package-lock.json', 'vite.config.js', 'index.html', 'Start-App.cmd', '专家填写助手-v1.5.1-排序与二轮修复版']
   let files = 0, bytes = 0
   async function copy(from, to) {
