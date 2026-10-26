@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "专家填写助手",
+  "version": "1.5.1",
+  "description": "共享题库：兼容全角等号与实际模型名称排序，独立保存网页排序同步偏好，保留存题软件二轮资料开关。",
+  "minimum_chrome_version": "116",
+  "permissions": [
+    "storage",
+    "scripting",
+    "sidePanel"
+  ],
+  "host_permissions": [
+    "https://aidp.bytedance.com/*",
+    "http://127.0.0.1/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "专家填写助手",
+    "default_popup": "popup.html"
+  },
+  "side_panel": {
+    "default_path": "app.html?panel=1"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://aidp.bytedance.com/*"
+      ],
+      "js": [
+        "question-probe.js",
+        "platform-watch.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

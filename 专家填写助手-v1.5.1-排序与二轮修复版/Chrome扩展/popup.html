@@ -1,0 +1,5 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>专家填写助手</title><link rel="stylesheet" href="popup.css"></head><body>
+<header><img src="icon48.png" alt=""><div><strong>专家填写助手</strong><small>填写一次，分步补齐</small></div></header>
+<p id="draft">正在读取记录…</p><label class="record-label" for="recordChoice">当前题号使用的记录</label><select id="recordChoice" disabled><option>正在读取…</option></select><button id="fill" class="primary" disabled>一键补填本页</button><div class="row"><button id="panel">侧边填写</button><button id="editor">打开完整填写台</button></div>
+<p id="status" role="status">只填写已经出现且可编辑的字段。解锁后再点一次即可补填。</p>
+<script src="schema.js"></script><script src="db.js"></script><script src="library-import.js"></script><script src="shared-map.js"></script><script src="shared-db.js"></script><script src="popup.js"></script></body></html>

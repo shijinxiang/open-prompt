@@ -1,0 +1,17 @@
+node_modules/
+dist/
+release/
+test-results/
+*.log
+data/
+.app-cache/
+backups/
+exports/
+.codex/
+.agents/
+.npm-cache/
+.repository-export-*/
+.env*
+*.zip
+/专家填写助手-v*/
+!/专家填写助手-v1.5.1-排序与二轮修复版/

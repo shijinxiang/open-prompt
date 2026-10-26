@@ -1,0 +1,39 @@
+name: Build Windows installer and publish updates
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Check version and configure repository
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          if ($env:GITHUB_REF_TYPE -eq 'tag' -and $env:GITHUB_REF_NAME -ne "v$version") { throw 'Tag and package version must match' }
+          node scripts/configure-release.cjs
+      - run: npm ci
+      - run: npm test
+      - run: npm run dist
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - run: npm run release:manifest
+      - name: Publish release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          gh release view "v$version" --repo "$env:GITHUB_REPOSITORY" 2>$null
+          if ($LASTEXITCODE -ne 0) { gh release create "v$version" --repo "$env:GITHUB_REPOSITORY" --title "开放题记录库 $version" --notes-file distribution/release-notes.txt }
+          if ($LASTEXITCODE -ne 0) { throw 'Release creation failed' }
+          gh release upload "v$version" "release/OpenQuestionStudio-Setup-$version.exe" "release/OpenQuestionStudio-$version.exe" release/update.json --repo "$env:GITHUB_REPOSITORY" --clobber
+          if ($LASTEXITCODE -ne 0) { throw 'Release upload failed' }
