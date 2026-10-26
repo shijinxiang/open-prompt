@@ -6,6 +6,7 @@ const { createStorage } = require('../electron/storage.cjs')
 
 async function main() {
   const root = path.resolve(__dirname, '..'), fixture = await fs.mkdtemp(path.join(root, 'test-results/installer-upgrade-'))
+  const currentVersion = JSON.parse(await fs.readFile(path.join(root, 'package.json'), 'utf8')).version
   const nonce = crypto.randomBytes(5).toString('hex'), executableName = 'OqsUpgradeTest-' + nonce
   const installRoot = path.join(fixture, 'program'), dataRoot = path.join(fixture, 'library'), storage = createStorage(dataRoot)
   const { createRecord } = await import('../src/domain.js'), record = createRecord(); record.title = '独立安装升级测试'; record.prompt = '原始题目'
@@ -24,9 +25,9 @@ async function main() {
     return path.join(output, `OpenQuestionStudio-Setup-${version}.exe`)
   }
   function assertTarget(file) { const relative = path.relative(fixture, path.resolve(file)); if (!relative || relative.startsWith('..') || path.isAbsolute(relative)) throw Error('Test target escaped fixture') }
-  async function install(file) {
+  async function install(file, chooseDirectory = false) {
     assertTarget(file); assertTarget(installRoot)
-    const result = spawnSync(file, ['/S', '/D=' + installRoot], { windowsHide: true, encoding: 'utf8', timeout: 120000 })
+    const result = spawnSync(file, chooseDirectory ? ['/S', '/D=' + installRoot] : ['/S'], { windowsHide: true, encoding: 'utf8', timeout: 120000 })
     if (result.status !== 0) throw result.error || Error('Test installation failed: ' + result.status)
     assert.ok((await fs.stat(path.join(installRoot, executableName + '.exe'))).size > 0)
   }
@@ -42,11 +43,11 @@ async function main() {
   }
   let installed = false
   try {
-    const first = await build('0.3.0'); await install(first); installed = true; await open('0.3.0', '安装升级前保存的资料')
+    const first = await build('0.3.1'); await install(first, true); installed = true; await open('0.3.1', '安装升级前保存的资料')
     const before = await fs.readFile(storage.dataFile), imageBefore = await fs.readFile(path.join(storage.attachments, record.models.doubao.screenshots[0].fileName))
-    const second = await build('0.3.1'); await install(second); await open('0.3.1')
+    const second = await build(currentVersion); await install(second); await open(currentVersion)
     assert.deepEqual(await fs.readFile(storage.dataFile), before); assert.deepEqual(await fs.readFile(path.join(storage.attachments, record.models.doubao.screenshots[0].fileName)), imageBefore)
-    console.log('PASS actual NSIS install 0.3.0 -> overwrite upgrade 0.3.1: program version changed and records/screenshots remained identical')
+    console.log(`PASS actual NSIS custom-directory install 0.3.1 -> overwrite upgrade ${currentVersion} without /D: chosen directory reused and records/screenshots remained identical`)
   } finally {
     if (installed) {
       const uninstaller = (await fs.readdir(installRoot)).find(name => /^Uninstall.*\.exe$/i.test(name))

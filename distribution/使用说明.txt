@@ -1,7 +1,7 @@
 开放题记录库 · Windows 免安装版
 
 1. 将整个压缩包解压到自己可读写的文件夹。
-2. 双击 OpenQuestionStudio-0.3.1.exe 打开软件。
+2. 双击 OpenQuestionStudio-0.3.2.exe 打开软件。
 3. 首次使用为空题库，可以新建记录或导入已有备份。
 
 运行环境：Windows 10 / 11，64 位。无需安装 Node.js，不需要登录，支持离线使用。

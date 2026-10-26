@@ -1,6 +1,6 @@
 {
   "name": "open-question-labeling-studio",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "开放题文本、五模型回复、排序与截图的本地记录库",
   "main": "electron/main.cjs",
   "author": "Open Question Labeling Studio",
@@ -83,7 +83,7 @@
       "oneClick": false,
       "perMachine": false,
       "allowElevation": false,
-      "allowToChangeInstallationDirectory": false,
+      "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "开放题记录库",
